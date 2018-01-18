@@ -1,0 +1,186 @@
+\documentclass{article}
+%\usepackage{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{xfrac}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage{verbatim}
+\usepackage{subfig}
+\usepackage{changepage}
+\usepackage{multirow}
+\usepackage{amsxtra}
+\usepackage{mathrsfs}
+\usepackage{pdfpages}
+\usepackage{bbm}
+\usepackage{tikz}
+\usetikzlibrary{matrix}
+\usepackage{amsthm}
+
+%\numberwithin{equation}{section}
+
+\newcommand{\C}{\mathbb C}
+\newcommand{\R}{\mathbb R}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\K}{\mathbb K}
+\newcommand{\D}{\mathbb D}
+\newcommand{\T}{\mathbb T}
+\renewcommand{\L}{\mathcal L}
+%\newcommand{\B}{\mathcal B}
+
+\newcommand{\Spin}{\text{Spin}}
+\newcommand{\Pin}{\text{Pin}}
+\newcommand{\Ad}{\text{Ad}}
+\newcommand{\Aut}{\text{Aut}}
+\newcommand{\End}{\text{End}}
+\newcommand{\Hom}{\text{Hom}}
+
+%\begin{comment}
+\usepackage[applemac]{inputenc} \usepackage[danish]{babel} \renewcommand{\danishhyphenmins}{22} % bedre orddeling 
+\usepackage[T1]{fontenc}
+%\end{comment}
+
+\newtheorem{theo}{Theorem}
+\newtheorem{lemma}[theo]{Lemma}
+\newtheorem{prop}[theo]{Proposition}
+\newtheorem{cor}[theo]{Corollary}
+\newtheorem{Definition}[theo]{Definition}
+
+\usepackage{mathtools}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+\addto\captionsdanish{ 
+\renewcommand\abstractname{Abstract} 
+\renewcommand\contentsname{Indholdsfortegnelse}
+}\addto\captionsdanish{ \renewcommand\appendixname{Appendiks} \renewcommand\contentsname{Indholdsfortegnelse}
+}
+
+\title{15.10 Continued Fraction Method for Factorisation}
+
+\begin{document}
+\maketitle
+
+\section*{Question 2.}
+For a real number $x\in \R$ the partial quotients are defined, setting $x_0=x$,
+$$a_n = \floor*{x_n},$$
+$$x_{n+1} = \frac1{x_n - a_n}.$$
+No further partial quotients are defined if $a_n = x_n$.
+
+Assume $x=\sqrt N$ for positive integer $N$. 
+If $N$ is a square number, $a_0=x_0$ as $x_0=\sqrt N$ is an integer.
+So assume $N$ is not square, then $\sqrt N$ is irrational and has an infinite set of of partial quotients. 
+We now show $$x_n = \frac{r_n + \sqrt N}{s_n}, \quad r_n, s_n \in \Z$$
+with $s_n | (r_n^2-N)$.
+$$x_1=\frac 1{x_0-a_0} 
+= \frac 1{\sqrt N - a_0} 
+= \frac {a_0 + \sqrt N}{N-a_0^2}$$
+which gives $r_1 = a_0$ and $s_1=N-a_0^2.$
+Clearly, $s_1 | (a_0^2-N)$.
+
+Assuming $x_n = \frac{r_n + \sqrt N}{s_n}$ for a given $n\in \N$, and $r_n, s_n$ as above, we get
+\begin{align*}
+x_{n+1} &= \frac 1{x_n - a_n} \\
+&= \frac 1{\frac{r_n+ \sqrt N}{s_n}-a_n}\\
+&= \frac {s_n}{(r_n - s_na_n) +  \sqrt N} \\
+&= \frac {s_n(-(r_n-s_na_n) + \sqrt N)}{N - (r_n-s_na_n)^2}\\
+&= \frac {s_n(s_na_n-r_n + \sqrt N)}{(N - r_n^2)-s_n^2a_n^2+2r_ns_na_n}\\
+&= \frac {s_na_n-r_n + \sqrt N}{2r_na_n-q_n-s_na_n^2}\\
+\end{align*}
+where $q_n\in \Z$ is such that $q_ns_n=r_n^2-N$ according to the induction hypothesis. 
+This completes the proof by induction, with
+\begin{equation}\label{rn}
+r_{n+1} = s_na_n-r_n
+\end{equation}
+and 
+\begin{equation}\label{sn}
+s_{n+1} = 2r_na_n-q_n-s_na_n^2
+\end{equation}
+since 
+\begin{align*}
+r_{n+1}^2-N &= (s_na_n-r_n)^2 - N \\
+&= s_n^2a_n^2 + r_n^2 - 2s_na_nr_n - N \\
+&= s_n^2a_n^2 - 2s_na_nr_n + q_ns_n \\
+&= s_n(s_na_n^2  - 2s_na_nr_n + q_n) \\
+&= -s_ns_{n+1}
+\end{align*}
+so indeed, $s_{n+1}|(r_{n+1}^2-N)$. 
+Furthermore, we note that $q_{n+1}=-s_n$.
+
+Using this insight the partial quotients, $a_n$, can be found purely by integer division, 
+$$a_{n} s_n = (r_n + a_0) + d$$
+where $d$ is an integer such that $0\le d < s_n$, and $a_0=\floor*{\sqrt N}$ as before. The integers $s_n, r_n$ are found using eq. \eqref{rn} and \eqref{sn}.
+
+Observations on the partial quotients:
+
+They seem to repeat themselves in a palindrome pattern.
+
+$r$ and $s$ approach $\sqrt N$ and $2\sqrt N$ respectively from below as $N$ increases.
+
+\section*{Question 3.}
+
+From considering the values of $N$ for which a solution to the negative Pell's equation are found using convergents, it is apparent that non of these are divisible by 3. Being divisible by 3 is in fact a condition on $N$ that ensures the negative Pell's equation is insoluble. 
+
+This is a special case of a more general condition. 
+Assume $p$ is a prime such that $a^2 \not\equiv -1$ for all $a\in \N$.
+If $p|N$, then
+$$x^2-Ny^2 \equiv x^2\ (\textrm{mod}\ p)$$
+%If $p$ is a prime such that $x^2 \not\equiv -1$ for all $x\in \N$, then
+and it is clear that there are no solutions to the negative Pell's equation for $N$. 
+%This gives a simple condition on $N$ to check if the Pell's equation is insoluble. 
+ 3 is such a prime for which -1 is not a square congruence class, as is 7 and 11.
+ 
+ Avoiding integer overflow with support up to $10^{15}$. 
+Assume $N\le 10^{10}$, and $x,y \le 10^{15}$. Then
+\begin{equation}
+\label{bound}
+|x^2-Ny^2|\le 10^{40}.
+\end{equation}
+Let $\{p_1, \ldots, p_k\}$ be primes such that 
+\begin{equation}
+\label{bound2}
+P = \prod_{i=1}^k p_i > 10^{40}+1.
+\end{equation}
+If
+$$x^2-Ny^2 \equiv \pm 1 \ (\textrm{mod}\ p_i)$$
+for $i=1,\ldots,k$, then 
+$p_i | x^2-Ny^2 \mp 1$.
+This implies $P|(x^2-Ny^2 \mp 1)$. Then
+$$x^2-Ny^2 \mp 1 = 0$$
+since otherwise 
+$$P \le x^2-Ny^2 \mp 1$$ which is in contradiction with \eqref{bound} and \eqref{bound2}.
+
+Computing Pell's equation for all primes in such a set of primes as the above, will ensure that a solution has actually been found while avoiding integer overflow can be obtained by choosing the primes $<\sqrt{10^{15}}$.
+ 
+ \section*{Question 4.}
+ 
+ \begin{align*}
+ & x^2 \equiv y^2 \ (\textrm{mod}\ N) \\
+ \iff & N|(x+y)(x-y)
+ \end{align*}
+ so for any prime factor $p|N$ we have $p|(x+y)$ or $p|(x-y)$.
+ Using the Euclidean algorithm we can efficiently find factors of $N$ by considering 
+ $$\textrm{gcd}(N,x+y)$$
+  $$\textrm{gcd}(N,x-y)$$
+ 
+If we assume $N$ is odd and $N=ab$ for non-trivial factors $a, b\in N$, with $a\le b$, then $a, b$ must be odd and we can define integers,
+$$x = a + \frac{b-a} 2$$
+$$y = \frac {b-a}2.$$
+With these definitions, %that $x,y \in \N$ and 
+$a = x-y$, $b = x+y$, and
+$$N=ab=(x-y)(x+y)=x^2-y^2.$$
+This proves that our assumptions on $N$ imply that there exists $x,y$ with $x^2 \equiv y^2 \ (\textrm{mod}\ N)$.
+
+\section*{Question 5.}
+
+
+
+
+
+
+
+
+\end{document}
