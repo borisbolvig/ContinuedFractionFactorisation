@@ -6,10 +6,10 @@ To see your current working directory, type in `pwd` and hit Enter.
 
 To change directory type `cd` followed by a whitespace and the full or relative path to the new directory.
 
-`Boriss-MacBook-Pro:~ Boris$ pwd
-/Users/Boris
-Boriss-MacBook-Pro:~ Boris$ cd Documents
-Boriss-MacBook-Pro:Documents Boris$ pwd
+`Boriss-MacBook-Pro:~ Boris$ pwd\n
+/Users/Boris\n
+Boriss-MacBook-Pro:~ Boris$ cd Documents\n
+Boriss-MacBook-Pro:Documents Boris$ pwd\n
 /Users/Boris/Documents`
 
 Another useful command is `ls`. This *lists* the files and subdirectories of the current work directory. 
