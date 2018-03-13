@@ -1,6 +1,7 @@
 #!/bin/env python
 from math import sqrt
 from fractions import gcd
+from collections import defaultdict
 
 class partial_quotients: #, number=10, printout=True, pell_sol=False, print_mod=False):
 
@@ -44,6 +45,8 @@ class partial_quotients: #, number=10, printout=True, pell_sol=False, print_mod=
             a_n = self.part_quotns[-1]
 
         result = set()
+        Psqr = defaultdict(set)
+        factors = set()
         for _ in range(steps):
             # find partial quotient from r, s
             if ((r+self.a_0)>0)==(s>0):  # integer division only works if same sign.
@@ -72,17 +75,25 @@ class partial_quotients: #, number=10, printout=True, pell_sol=False, print_mod=
                     self.ss.pop(0)
                     self.rs.pop(0)
                 P = (a_n * self.P[-1] % self.N + self.P[-2] % self.N) % self.N
+                # P = (a_n * self.P[-1] + self.P[-2])
                 self.P.append(P)
-                Q = (a_n * self.Q[-1] % self.N + self.Q[-2] % self.N) % self.N
-                self.Q.append(Q)
-                # avoid integer overflow by not squaring numbers, when checking P^2 = Q^2 (N)
-                if ((P+Q) % self.N) * (P-Q) % self.N == 0:
-                    result.add((P, Q))
-                # No need to store values
+                P2 = P**2 % self.N
+                if P2 in Psqr and P not in Psqr[P2]:
+                    print "iteration number {}".format(_)
+                    for PP in Psqr[P2]:
+                        f = gcd(N, P + PP)
+                        if f != 1:
+                            print f
+                            factors.add(f)
+                        if P != PP:
+                            fs = gcd(N, abs(P - PP))
+                            if f != 1:
+                                print f
+                                factors.add(f)
+                Psqr[P2].add(P)
                 self.P.pop(0)
-                self.Q.pop(0)
 
-        return list(result)  # returns empty list for savemode, but that doesn't really matter.
+        return list(factors)  # returns empty list for savemode, but that doesn't really matter.
 
 
     def compute_Pells(self):
@@ -182,23 +193,16 @@ def my_gcd(a, b):
 
 def find_factor(N, steps=100):
     Npq = partial_quotients(N, steps=0)
-    candidates = Npq.continue_fraction(steps=steps, savemode=False)
-    while candidates == []:
+    factors = Npq.continue_fraction(steps=steps, savemode=False)
+    while factors == []:
         print "No candidates found from continued fraction"
-        candidates = Npq.continue_fraction(steps=steps, savemode=False)
-    else:
-        factors = set()
-        for x, y in candidates:
-            print x, y
-            factors.add(gcd(N, x + y))
-            if x != y:
-                factors.add(gcd(N, abs(x - y)))
-        return list(factors)
+        factors = Npq.continue_fraction(steps=steps, savemode=False)
+    return list(factors)
 
 if __name__=="__main__":
 
     # Ns = []
-    # for N in range(509,510):
+    # for N in range(1,51):
     #     Npq = partial_quotients(N, steps=100)
     #     if not Npq.isSquare:  # this is in case N is square
     #         Ns.append(Npq)
@@ -206,9 +210,9 @@ if __name__=="__main__":
     # Q2(Ns)
     # Q3(Ns)
 
-    N = 4994306101
-    N = 2181933577
+    # N = 4994306101
+    # N = 2181933577
     N = 3760842719
-    #N = 51783
-    print find_factor(N, steps=100000)
+    # N = 51783
+    print find_factor(N, steps=20000)
 
